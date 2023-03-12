@@ -11,10 +11,9 @@
         <h1>Manage Users</h1>
         
         <p>
-            <c:if test="${user.email == null}">No users found. Please add a user</c:if>
+            <c:if test="${user.email.isempty()}">No users found. Please add a user</c:if>
         </p>
         
-        <c:if test="${user.email != null}">
             <table>
                 <tr>
                     <th>Email</th>
@@ -24,28 +23,34 @@
                     <th> </th>
                     <th> </th>
                 </tr>
-            <c:forEach items="${users}" var="user">
+            <c:forEach items="${allUsers}" var="user">
                 <tr>
-                    <td>${user.getEmail()}</td>
-                    <td>${user.getFirstName()}</td>
-                    <td>${user.getLastName()}</td>
-                    <td>${user.getRole().getRoleName()}</td>
-                    <td><a href="notes?action=edit&amp;email=${user.getEmail()}">Edit</a></td>
-                    <td><a href="notes?action=delete&amp;email=${user.getEmail()}">Delete</a></td>
+                    <td>${user.email}</td>
+                    <td>${user.firstName}</td>
+                    <td>${user.lastName}</td>
+                    <c:choose>
+                        <c:when test="${user.getRole().getRoleID() == 1}">
+                            <td>system admin</td>
+                        </c:when>
+                        <c:otherwise>
+                            <td>regular user</td>
+                        </c:otherwise>
+                    </c:choose>
+                    <td><a href="user?action=edit&amp;email=${user.email}">Edit</a></td>
+                    <td><a href="user?action=delete&amp;email=${user.email}">Delete</a></td>
                 </tr>
             </c:forEach>
             </table>
 
         
-        <c:if test="${edit != null}">
+        <c:if test="${selectedUser eq null}">
             <h2>Add User</h2>
-            <form action="notes" method="post">
+            <form action="users" method="post">
                 Email: <input type="text" name="email" value="${email}"><br>
-                First name: <input type="text" name="firstname" value="${firstname}"><br>
-                Last name: <input type="text" name="lastname" value="${lastname}"><br>
+                First name: <input type="text" name="firstName" value="${firstName}"><br>
+                Last name: <input type="text" name="lastName" value="${lastName}"><br>
                 Password: <input type="password" name="password" value=""><br>
-                <label for = "roleDropDown">Role:</label>
-                <select name = "role">
+                Role<select name = "role">
                     <option value="1">system admin</option>
                     <option value="2">regular user</option>
                 </select>
@@ -55,23 +60,23 @@
             </form>
         </c:if>
             
-        <c:if test="${edit == null}">
+        <c:if test="${selectedUser ne null}">
             <h2>Edit User</h2>
-            <form action="notes" method="post">
-                Email: ${user.getEmail()}<br>
-                First name: <input type="text" name="firstname" value="${fname}"><br>
-                Last name: <input type="text" name="firstname" value="${lname}"><br>
+            <form action="users" method="post">
+                Email: ${selectedUser.email}<br>
+                First name: <input type="text" name="firstName" value="${selectedUser.firstName}"><br>
+                Last name: <input type="text" name="lastName" value="${selectedUser.lastName}"><br>
                 Password: <input type="password" name="password" value=""><br>
-                <label for = "roleDropDown">Role:</label>
-                <select name="role">
+                Role<select name = "role">
                     <option value="1">system admin</option>
                     <option value="2">regular user</option>
                 </select>
                 <br>
-                <input type="hidden" name="action" value="Update">
+                <input type="hidden" name="action" value="update">
                 <input type="submit" value="Update">
-                <input type="hidden" name="action" value="Cancel">
+                <input type="hidden" name="action" value="cancel">
                 <input type="submit" value="Cancel">
             </form>
+        </c:if>
     </body>
 </html>

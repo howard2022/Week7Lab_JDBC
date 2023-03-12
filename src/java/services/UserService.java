@@ -14,9 +14,9 @@ public class UserService {
         return user;
     }
     
-    public ArrayList<User> getAll() throws Exception {
+    public List<User> getAll() throws Exception {
         UserDB userdb = new UserDB();
-        ArrayList<User> users = userdb.getAll();
+        List<User> users = userdb.getAll();
         return users;
     }
     
@@ -40,6 +40,7 @@ public class UserService {
         UserDB userdb = new UserDB();
         userdb.delete(user);
     }
+
 
 
 

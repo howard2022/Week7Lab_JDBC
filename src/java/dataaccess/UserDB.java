@@ -4,13 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 import models.Role;
 import models.User;
 
 public class UserDB {
 
-    public ArrayList<User> getAll() throws Exception {
-        ArrayList<User> users = new ArrayList<>();
+    public List<User> getAll() throws Exception {
+        List<User> users = new ArrayList<>();
         ConnectionPool cp = ConnectionPool.getInstance();
         Connection con = cp.getConnection();
         PreparedStatement ps = null;
@@ -46,7 +47,7 @@ public class UserDB {
         Connection con = cp.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
-        String sql = "SELECT * FROM note WHERE email=?";
+        String sql = "SELECT * FROM user WHERE email=?";
         
         try {
             ps = con.prepareStatement(sql);
@@ -113,7 +114,7 @@ public class UserDB {
         ConnectionPool cp = ConnectionPool.getInstance();
         Connection con = cp.getConnection();
         PreparedStatement ps = null;
-        String sql = "DELETE FROM note WHERE email=?";
+        String sql = "DELETE FROM user WHERE email=?";
         
         try {
             ps = con.prepareStatement(sql);
