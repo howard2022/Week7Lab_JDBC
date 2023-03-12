@@ -21,12 +21,11 @@ public class UserServlet extends HttpServlet {
             throws ServletException, IOException {
 
         UserService us = new UserService();
-
+        HttpSession session = request.getSession();
         String action = request.getParameter("action");
-
+        String email = request.getParameter("email");
+//        String email = (String) session.getAttribute("email");
         try {
-            HttpSession session = request.getSession();
-            String email = (String) session.getAttribute("email");
 
             List<User> users = us.getAll();
             session.setAttribute("allUsers", users);
@@ -34,26 +33,19 @@ public class UserServlet extends HttpServlet {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        if (action != null && action.equals("edit")) {
-            try {
-                HttpSession session = request.getSession();
-                String email = (String) session.getAttribute("email");
+        try {
+            if (action != null && action.equals("edit")) {
+
                 User user = us.get(email);
-                request.setAttribute("selectedUser", user);
+                 session.setAttribute("selectedUser", user);
 
-            } catch (Exception ex) {
-                Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else if (action != null && action.equals("delete")) {
+            } else if (action != null && action.equals("delete")) {
 
-            String email = (String) request.getParameter("email");
-            try {
                 us.delete(email);
-            } catch (Exception ex) {
-                Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } catch (Exception ex) {
+            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
     }
 
@@ -81,12 +73,15 @@ public class UserServlet extends HttpServlet {
                     us.update(email, firstname, lastname, password, roleID);
                     break;
 
-                case "":
+                case "cancel":
+                    getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
             }
             List<User> users = us.getAll();
             request.setAttribute("allUsers", users);
+
         } catch (Exception ex) {
-            Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserServlet.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
         getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);

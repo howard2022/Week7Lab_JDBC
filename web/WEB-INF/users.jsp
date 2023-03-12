@@ -45,7 +45,7 @@
         
         <c:if test="${selectedUser eq null}">
             <h2>Add User</h2>
-            <form action="users" method="post">
+            <form action="" method="post">
                 Email: <input type="text" name="email" value="${email}"><br>
                 First name: <input type="text" name="firstName" value="${firstName}"><br>
                 Last name: <input type="text" name="lastName" value="${lastName}"><br>
